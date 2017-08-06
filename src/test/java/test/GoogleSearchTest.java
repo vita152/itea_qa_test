@@ -1,15 +1,11 @@
 package test;
 
-import io.github.bonigarcia.wdm.ChromeDriverManager;
-import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import page.GoogleResultPage;
 import page.GoogleSearchPage;
-
-import java.util.List;
 
 /**
  * Created by UI дизайн on 05.08.2017.
@@ -17,13 +13,14 @@ import java.util.List;
 public class GoogleSearchTest {
     public WebDriver webDriver;
     GoogleSearchPage googleSearchPage;
+    GoogleResultPage googleResultPage;
 
 
     @BeforeClass
-    public void beforeClass(){
+    public void beforeClass() {
         webDriver = new FirefoxDriver();
         webDriver.navigate().to("https://www.google.com.ua");
-        googleSearchPage  = new GoogleSearchPage(webDriver);
+        googleSearchPage = new GoogleSearchPage(webDriver);
     }
 
     /**
@@ -35,15 +32,24 @@ public class GoogleSearchTest {
     }
 
     @Test
-    public void  SearchITEA (){
-        String expectedText = "ITEA";
+    public void SearchITEA() {
+        String expectedText = "itea";
 
         googleSearchPage = new GoogleSearchPage(webDriver);
-        googleSearchPage.writeText("Itea");
-        int incidentCardsCount = googleSearchPage.getIncidentCardsCount();
+        googleSearchPage.writeText(expectedText);
 
-        Assert.assertEquals(googleSearchPage.getPageTitle(), "Itea - Поиск в Google", "After search Page Title is wrong");
-        Assert.assertEquals(incidentCardsCount, 7, "Result is't 7" );
+        googleResultPage = new GoogleResultPage(webDriver);
+        int incidentCardsCount = googleResultPage.getIncidentCardsCount();
+
+
+        Assert.assertTrue(googleResultPage.isPageLoaded(), "SearchResults Page is not loaded");
+        Assert.assertEquals(incidentCardsCount, 10, "Result is't 10");
+        Assert.assertTrue(googleResultPage.isAllElementsContain(expectedText), "Page 1 has different words than search word \"itea\"");
+
+        googleResultPage.goToPage(2);
+
+        Assert.assertEquals(incidentCardsCount, 10, "Result is't 10");
+        Assert.assertTrue(googleResultPage.isAllElementsContain(expectedText), "Page 2 has different words than search word \"itea\"");
 
     }
 }

@@ -36,22 +36,4 @@ public class BasePage {
     public WebElement waitUntilElementDisplaued(WebElement element) {
         return waitUntilElementDisplaued(element, 10);
     }
-
-    /**
-     * Common method to get current Page URL
-     *
-     * @return String with current Page URL
-     */
-    public String getPageURL() {
-        return webDriver.getCurrentUrl();
-    }
-    /**
-     * Common method to get current Page title
-     *
-     * @return String with current Page title
-     */
-    public String getPageTitle() {
-        return webDriver.getTitle();
-    }
-
 }
